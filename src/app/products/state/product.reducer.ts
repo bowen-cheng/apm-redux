@@ -1,5 +1,12 @@
 import { Product } from '../product';
 
+import * as globalStates from '../../state/app.state'
+
+//$$: once loaded, the following sate overwrites the global AppState and adds the products slice
+export interface AppState extends globalStates.AppState {
+  products: ProductState;
+}
+
 export interface ProductState {
   products: Product[];
   currentProduct: Product;
