@@ -13,10 +13,16 @@ export interface ProductState {
   showProductCode: boolean;
 }
 
+const initialState: ProductState =  {
+  products: [],
+  currentProduct: null,
+  showProductCode: true
+};
+
 /**
  * Product reducer function
  */
-export function productReducer(state: ProductState, action): ProductState {
+export function productReducer(state = initialState, action): ProductState {
   switch (action.type) {
     case 'TOGGLE_PRODUCT_CODE':
       return {

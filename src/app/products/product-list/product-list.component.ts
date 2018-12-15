@@ -39,9 +39,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     // $$: "products" matches the name of the store we defined in the ProductModule
     this.productStore.pipe(select('products')).subscribe(
       (productState: ProductState) => {
-        if (productState) {
-          this.displayCode = productState.showProductCode;
-        }
+        //$$: The store is initialized to an non-null initial state, so no need to check null
+        this.displayCode = productState.showProductCode;
       });
   }
 
