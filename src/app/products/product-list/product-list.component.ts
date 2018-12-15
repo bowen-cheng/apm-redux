@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
+import { AppState, ProductState } from '../state/product.reducer';
 
 @Component({
   selector: 'pm-product-list',
@@ -22,8 +23,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
   sub: Subscription;
-
-  constructor(private productService: ProductService, private productStore: Store<any>) { }
+  // $$: Notice here we imported the AppState defined in ProductReducer, not the global one
+  constructor(private productService: ProductService, private productStore: Store<AppState>) { }
 
   ngOnInit(): void {
     this.sub = this.productService.selectedProductChanges$.subscribe(
@@ -37,9 +38,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     // $$: "products" matches the name of the store we defined in the ProductModule
     this.productStore.pipe(select('products')).subscribe(
-      products => {
-        if (products) {
-          this.displayCode = products.showProductCode;
+      (productState: ProductState) => {
+        if (productState) {
+          this.displayCode = productState.showProductCode;
         }
       });
   }

@@ -2,7 +2,7 @@ import { Product } from '../product';
 
 import * as globalStates from '../../state/app.state'
 
-//$$: once loaded, the following sate overwrites the global AppState and adds the products slice
+//$$: The following sate should be imported instead of the global one
 export interface AppState extends globalStates.AppState {
   products: ProductState;
 }
@@ -16,11 +16,9 @@ export interface ProductState {
 /**
  * Product reducer function
  */
-export function productReducer(state, action) {
+export function productReducer(state: ProductState, action): ProductState {
   switch (action.type) {
     case 'TOGGLE_PRODUCT_CODE':
-      console.log('existing state:', state);
-      console.log('Action:', action);
       return {
         ...state,
         // $$: overwrite the existing "showProductCode" property
