@@ -1,3 +1,11 @@
+import { Product } from '../product';
+
+export interface ProductState {
+  products: Product[];
+  currentProduct: Product;
+  showProductCode: boolean;
+}
+
 /**
  * Product reducer function
  */
