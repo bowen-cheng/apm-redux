@@ -6,6 +6,7 @@ const getProductFeatureState = createFeatureSelector<ProductState>('products');
 
 export const getShowProductCode = createSelector(
   getProductFeatureState,
+  // $$: More selectors can be inserted here. Their resulting state will be passed to the projector function in order
   state => state.showProductCode
 );
 

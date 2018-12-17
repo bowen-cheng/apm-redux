@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { Subscription } from 'rxjs';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { AppState, ProductState } from '../state/product.reducer';
+import { AppState } from '../state/product.reducer';
+import * as fromProducts from '../state/product.selector';
 
 @Component({
   selector: 'pm-product-list',
@@ -23,6 +24,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
   sub: Subscription;
+
   // $$: Notice here we imported the AppState defined in ProductReducer, not the global one
   constructor(private productService: ProductService, private productStore: Store<AppState>) { }
 
@@ -37,11 +39,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
     );
 
     // $$: "products" matches the name of the store we defined in the ProductModule
-    this.productStore.pipe(select('products')).subscribe(
-      (productState: ProductState) => {
-        //$$: The store is initialized to an non-null initial state, so no need to check null
-        this.displayCode = productState.showProductCode;
-      });
+    // this.productStore.pipe(select('products')).subscribe(
+    //   (productState: ProductState) => {
+    //     //$$: The store is initialized to an non-null initial state, so no need to check null
+    //     this.displayCode = productState.showProductCode;
+    //   });
+
+    // $$: Using the pre-defined selector, we will directly receive the ShowProductCode value.
+    this.productStore.pipe(select(fromProducts.getShowProductCode)).subscribe(value => this.displayCode = value);
   }
 
   ngOnDestroy(): void {
@@ -50,7 +55,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   checkChanged(value: boolean): void {
     // $$: Action is an object with type and payload
-    this.productStore.dispatch({type: 'TOGGLE_PRODUCT_CODE', payload: value});
+    this.productStore.dispatch({ type: 'TOGGLE_PRODUCT_CODE', payload: value });
   }
 
   newProduct(): void {
