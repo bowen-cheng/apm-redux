@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-
 import { Subscription } from 'rxjs';
-
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import * as ProductActions from '../state/product.action';
@@ -30,15 +28,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(private productService: ProductService, private productStore: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.sub = this.productService.selectedProductChanges$.subscribe(
-      selectedProduct => this.selectedProduct = selectedProduct
-    );
-
     this.productService.getProducts().subscribe(
       (products: Product[]) => this.products = products,
       (err: any) => this.errorMessage = err.error
     );
 
+    // $$: Code commented out since it uses plain string as selectors, not strongly typed ones
     // $$: "products" matches the name of the store we defined in the ProductModule
     // this.productStore.pipe(select('products')).subscribe(
     //   (productState: ProductState) => {
@@ -46,8 +41,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
     //     this.displayCode = productState.showProductCode;
     //   });
 
-    // $$: Using the pre-defined selector, we will directly receive the ShowProductCode value.
+    // $$: Using the strongly typed selector, we will directly receive the ShowProductCode value.
     this.productStore.pipe(select(fromProducts.getShowProductCode)).subscribe(value => this.displayCode = value);
+    this.productStore.pipe(select(fromProducts.getCurrentProduct)).subscribe(value => this.selectedProduct = value);
   }
 
   ngOnDestroy(): void {
@@ -63,11 +59,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   newProduct(): void {
-    this.productService.changeSelectedProduct(this.productService.newProduct());
+    // $$: dispatch an action to initialize the ProductEdit  from with empty values
+    this.productStore.dispatch(new ProductActions.InitializeCurrentProduct());
   }
 
   productSelected(product: Product): void {
-    this.productService.changeSelectedProduct(product);
+    // $$: Dispatch an action to update the slice of store of current product
+    this.productStore.dispatch(new ProductActions.SetCurrentProduct(product));
   }
 
 }
