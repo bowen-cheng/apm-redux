@@ -28,10 +28,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(private productService: ProductService, private productStore: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(
-      (products: Product[]) => this.products = products,
-      (err: any) => this.errorMessage = err.error
-    );
+    // $$: dispatch load action to load products
+    this.productStore.dispatch(new ProductActions.Load());
 
     // $$: Code commented out since it uses plain string as selectors, not strongly typed ones
     // $$: "products" matches the name of the store we defined in the ProductModule
@@ -44,10 +42,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
     // $$: Using the strongly typed selector, we will directly receive the ShowProductCode value.
     this.productStore.pipe(select(fromProducts.getShowProductCode)).subscribe(value => this.displayCode = value);
     this.productStore.pipe(select(fromProducts.getCurrentProduct)).subscribe(value => this.selectedProduct = value);
+    // $$: subscribe to the store to get the list of products once the request is finished
+    this.productStore.pipe(select(fromProducts.getProducts)).subscribe((val: Product[]) => this.products = val);
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
   }
 
   checkChanged(value: boolean): void {
