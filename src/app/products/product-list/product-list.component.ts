@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import * as ProductActions from '../state/product.action';
@@ -18,11 +19,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   displayCode: boolean;
 
-  products: Product[];
+  // $$: unsubscribe method 1, takeWhile() operator
+  isComponentActive = true;
+  // $$: unsubscribe method 2, async pipe
+  products$: Observable<Product[]>;
 
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
-  sub: Subscription;
 
   // $$: Notice here we imported the AppState defined in ProductReducer, not the global one
   constructor(private productService: ProductService, private productStore: Store<AppState>) { }
@@ -41,12 +44,22 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     // $$: Using the strongly typed selector, we will directly receive the ShowProductCode value.
     this.productStore.pipe(select(fromProducts.getShowProductCode)).subscribe(value => this.displayCode = value);
-    this.productStore.pipe(select(fromProducts.getCurrentProduct)).subscribe(value => this.selectedProduct = value);
+
+    // $$: unsubscribe method 1: use the takeWhile operator to automatically unsubscribe if component is inactive
+    this.productStore.pipe(
+      select(fromProducts.getCurrentProduct),
+      takeWhile(() => this.isComponentActive)
+    ).subscribe(value => this.selectedProduct = value);
+
     // $$: subscribe to the store to get the list of products once the request is finished
-    this.productStore.pipe(select(fromProducts.getProducts)).subscribe((val: Product[]) => this.products = val);
+    // this.productStore.pipe(select(fromProducts.getProducts)).subscribe((val: Product[]) => this.products = val);
+
+    // $$: unsubscribe method 2: use an async pipe to let Angular automatically unsubscribe if component is inactive
+    this.products$ = this.productStore.pipe(select(fromProducts.getProducts));
   }
 
   ngOnDestroy(): void {
+    this.isComponentActive = false;
   }
 
   checkChanged(value: boolean): void {
