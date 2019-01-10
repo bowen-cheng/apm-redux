@@ -14,12 +14,14 @@ export interface ProductState {
   products: Product[];
   currentProduct: Product;
   showProductCode: boolean;
+  error: string;
 }
 
 const initialState: ProductState = {
   products: [],
   currentProduct: null,
-  showProductCode: true
+  showProductCode: true,
+  error: ''
 };
 
 /**
@@ -57,7 +59,14 @@ export function productReducer(state = initialState, action: ProductAction): Pro
     case ProductActionType.LoadSuccess:
       return {
         ...state,
-        products: action.payload
+        products: action.payload,
+        error: '' // clear any residual error info on load success
+      };
+    case ProductActionType.LoadFailure:
+      return {
+        ...state,
+        products: [],
+        error: action.payload
       };
     default:
       return state;

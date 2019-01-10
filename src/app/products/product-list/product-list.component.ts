@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -14,9 +14,9 @@ import * as fromProducts from '../state/product.selector';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnDestroy {
+  // Used to highlight the selected product in the list
+  selectedProduct: Product | null;
   pageTitle = 'Products';
-  errorMessage: string;
-
   displayCode: boolean;
 
   // $$: unsubscribe method 1, takeWhile() operator
@@ -24,8 +24,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // $$: unsubscribe method 2, async pipe
   products$: Observable<Product[]>;
 
-  // Used to highlight the selected product in the list
-  selectedProduct: Product | null;
+  error$: Observable<string>;
 
   // $$: Notice here we imported the AppState defined in ProductReducer, not the global one
   constructor(private productService: ProductService, private productStore: Store<AppState>) { }
@@ -56,6 +55,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     // $$: unsubscribe method 2: use an async pipe to let Angular automatically unsubscribe if component is inactive
     this.products$ = this.productStore.pipe(select(fromProducts.getProducts));
+
+    this.error$ = this.productStore.pipe(select(fromProducts.getError));
   }
 
   ngOnDestroy(): void {

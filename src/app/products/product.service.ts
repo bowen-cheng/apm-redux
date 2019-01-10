@@ -8,6 +8,7 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class ProductService {
+  // change the url to something else to see loadFailure action to be dispatched by loadProduct effect
   private productsUrl = 'api/products';
   private products: Product[];
 
