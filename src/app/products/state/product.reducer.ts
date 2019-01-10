@@ -2,9 +2,11 @@ import * as globalStates from '../../state/app.state';
 import { Product } from '../product';
 import { ProductAction, ProductActionType } from './product.action';
 
-//$$: The following sate should be imported instead of the global one
+// $$: The following sate should be imported instead of the global one
 export interface AppState extends globalStates.AppState {
-  products: ProductState;
+  // $$: this field name here is not the name of the slice of the state for products. Instead, the slice name "products"
+  // is defined in ProductModule by "StoreModule.forFeature('products', productReducer)"
+  productState: ProductState;
 }
 
 /**
