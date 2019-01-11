@@ -14,14 +14,14 @@ export interface AppState extends globalStates.AppState {
  */
 export interface ProductState {
   products: Product[];
-  currentProduct: Product;
+  currentProductId: number | null;
   showProductCode: boolean;
   error: string;
 }
 
 const initialState: ProductState = {
   products: [],
-  currentProduct: null,
+  currentProductId: null,
   showProductCode: true,
   error: ''
 };
@@ -40,23 +40,17 @@ export function productReducer(state = initialState, action: ProductAction): Pro
     case ProductActionType.SetCurrentProduct:
       return {
         ...state,
-        currentProduct: action.payload
+        currentProductId: action.payload.id
       };
     case ProductActionType.ClearCurrentProduct:
       return {
         ...state,
-        currentProduct: null
+        currentProductId: null
       };
     case ProductActionType.InitializeCurrentProduct:
       return {
         ...state,
-        currentProduct: {
-          id: 0,
-          productName: '',
-          productCode: ' ',
-          description: '',
-          starRating: 0
-        }
+        currentProductId: 0
       };
     case ProductActionType.LoadSuccess:
       return {

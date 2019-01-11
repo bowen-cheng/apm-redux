@@ -10,9 +10,31 @@ export const getShowProductCode = createSelector(
   state => state.showProductCode
 );
 
+export const getCurrentProductId = createSelector(
+  getProductFeatureState,
+  state => state.currentProductId
+);
+
 export const getCurrentProduct = createSelector(
   getProductFeatureState,
-  state => state.currentProduct
+  getCurrentProductId,
+  // $$: These parameters are passed in by order of the above two selector
+  (state, currentProductId) => {
+    switch (currentProductId) {
+      case 0:
+        return {
+          id: 0,
+          productName: '',
+          productCode: ' ',
+          description: '',
+          starRating: 0
+        };
+      case null:
+        return null;
+      default:
+        return state.products.find(aProduct => aProduct.id === currentProductId);
+    }
+  }
 );
 
 export const getProducts = createSelector(
