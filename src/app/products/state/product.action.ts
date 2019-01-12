@@ -9,7 +9,10 @@ export enum ProductActionType {
   InitializeCurrentProduct = '[Product] Initialize current product',
   Load = '[Product] Load',
   LoadSuccess = '[Product] Load success',
-  LoadFailure = '[Product] Load failure'
+  LoadFailure = '[Product] Load failure',
+  Update = '[Product] Update',
+  UpdateSuccess = '[Product] Update success',
+  UpdateFailure = '[Product] Update failure'
 }
 
 // $$: build action creators
@@ -49,11 +52,32 @@ export class LoadFailure implements Action {
   constructor(public payload: string) {}
 }
 
+export class Update implements Action {
+  readonly type = ProductActionType.Update;
+
+  constructor(public product: Product) {}
+}
+
+export class UpdateSuccess implements Action {
+  readonly type = ProductActionType.UpdateSuccess;
+
+  constructor(public product: Product) {}
+}
+
+export class UpdateFailure implements Action {
+  readonly type = ProductActionType.UpdateFailure;
+
+  constructor(public payload: string) {}
+}
+
 // $$: Define a union type for action creators
 export type ProductAction = ToggleProductCode
-| SetCurrentProduct
-| ClearCurrentProduct
-| InitializeCurrentProduct
-| Load
-| LoadSuccess
-| LoadFailure
+  | SetCurrentProduct
+  | ClearCurrentProduct
+  | InitializeCurrentProduct
+  | Load
+  | LoadSuccess
+  | LoadFailure
+  | Update
+  | UpdateSuccess
+  | UpdateFailure
