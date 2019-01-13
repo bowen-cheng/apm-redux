@@ -27,7 +27,7 @@ const initialState: ProductState = {
 };
 
 /**
- * Product reducer function
+ * Reducer functions take two parameters: the previous state and an action
  */
 export function productReducer(state = initialState, action: ProductAction): ProductState {
   switch (action.type) {
@@ -62,6 +62,21 @@ export function productReducer(state = initialState, action: ProductAction): Pro
       return {
         ...state,
         products: [],
+        error: action.payload
+      };
+    case ProductActionType.UpdateSuccess:
+      const updatedProducts = state.products.map(
+        oldProduct => oldProduct.id === action.payload.id ? action.payload : oldProduct
+      );
+      return {
+        ...state,
+        products: updatedProducts,
+        currentProductId: action.payload.id,
+        error: '' // clear any residual error info on load success
+      };
+    case ProductActionType.UpdateFailure:
+      return {
+        ...state,
         error: action.payload
       };
     default:

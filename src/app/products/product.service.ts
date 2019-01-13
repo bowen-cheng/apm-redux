@@ -57,16 +57,7 @@ export class ProductService {
     return this.http.put<Product>(url, product, { headers: headers })
       .pipe(
         tap(() => console.log('updateProduct: ' + product.id)),
-        // Update the item in the list
-        // This is required because the selected product that was edited
-        // was a copy of the item from the array.
-        tap(() => {
-          const foundIndex = this.products.findIndex(item => item.id === product.id);
-          if (foundIndex > -1) {
-            this.products[foundIndex] = product;
-          }
-        }),
-        // Return the product on an update
+        // $$: Return the product on an update
         map(() => product),
         catchError(this.handleError)
       );

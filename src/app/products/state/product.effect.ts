@@ -4,7 +4,15 @@ import { of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { Load, LoadFailure, LoadSuccess, ProductActionType } from './product.action';
+import {
+  Load,
+  LoadFailure,
+  LoadSuccess,
+  ProductActionType,
+  Update,
+  UpdateFailure,
+  UpdateSuccess
+} from './product.action';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +29,17 @@ export class ProductEffect {
       return this.productService.getProducts().pipe(
         map((products: Product[]) => new LoadSuccess(products)),
         catchError(err => of(new LoadFailure(err)))
+      );
+    })
+  );
+
+  @Effect()
+  updateProducts = this.actions.pipe(
+    ofType(ProductActionType.Update),
+    mergeMap((action: Update) => {
+      return this.productService.updateProduct(action.payload).pipe(
+        map((product: Product) => new UpdateSuccess(product)),
+        catchError(err => of(new UpdateFailure(err)))
       );
     })
   );

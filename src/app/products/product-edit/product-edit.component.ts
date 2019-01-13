@@ -143,11 +143,8 @@ export class ProductEditComponent implements OnInit, OnDestroy {
             (err: any) => this.errorMessage = err.error
           );
         } else {
-          this.productService.updateProduct(p).subscribe(
-            // $$: Set this product to be selected
-            product => this.productStore.dispatch(new ProductActions.SetCurrentProduct(product)),
-            (err: any) => this.errorMessage = err.error
-          );
+          // $$: dispatch an action to update the product
+          this.productStore.dispatch(new ProductActions.Update(p));
         }
       }
     } else {

@@ -55,13 +55,13 @@ export class LoadFailure implements Action {
 export class Update implements Action {
   readonly type = ProductActionType.Update;
 
-  constructor(public product: Product) {}
+  constructor(public payload: Product) {}
 }
 
 export class UpdateSuccess implements Action {
   readonly type = ProductActionType.UpdateSuccess;
 
-  constructor(public product: Product) {}
+  constructor(public payload: Product) {}
 }
 
 export class UpdateFailure implements Action {
