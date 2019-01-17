@@ -7,7 +7,7 @@
   <!--
   $$: unsubscribe method 2: using "as" statement, we create a local variable can be used in the template
   -->
-  <div class="card-body" *ngIf="products$ | async as products">
+  <div class="card-body" *ngIf="products">
     <div class="list-group">
       <!--
       $$: unsubscribe method 2: The "products" var in the "*ngFor" below refers to what's create with the "as" statement
@@ -42,6 +42,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="error$ | async as errorMessage" class="alert alert-danger">
+<div *ngIf="errorMessage" class="alert alert-danger">
   Error: {{ errorMessage }}
 </div>

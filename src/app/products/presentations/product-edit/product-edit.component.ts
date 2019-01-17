@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { GenericValidator } from '../../shared/generic-validator';
-import { NumberValidators } from '../../shared/number.validator';
-import { Product } from '../product';
-import { ProductService } from '../product.service';
-import * as ProductActions from '../state/product.action';
-import { AppState } from '../state/product.reducer';
-import * as fromProducts from '../state/product.selector';
+import { GenericValidator } from '../../../shared/generic-validator';
+import { NumberValidators } from '../../../shared/number.validator';
+import { Product } from '../../product';
+import { ProductService } from '../../product.service';
+import * as ProductActions from '../../state/product.action';
+import { AppState } from '../../state/product.reducer';
+import * as fromProducts from '../../state/product.selector';
 
 @Component({
   selector: 'pm-product-edit',
