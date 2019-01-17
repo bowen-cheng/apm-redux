@@ -7,6 +7,12 @@ import * as ProductActions from '../../state/product.action';
 import { AppState } from '../../state/product.reducer';
 import * as fromProducts from '../../state/product.selector';
 
+/**
+ * This is a container component
+ * It doesn't have much HTML or CSS
+ * It cares more about the logic of loading and changing data
+ * It loads and changes data via service classes or NgRx store once such event is emitted by presentational components
+ */
 @Component({
   templateUrl: './product-shell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

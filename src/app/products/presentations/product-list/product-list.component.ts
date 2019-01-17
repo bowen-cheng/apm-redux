@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../product';
 
+/**
+ * This is a presentational component.
+ * It doesn't have any dependencies of store or services, all data are injected via @Input()
+ * When some data needs to be changed, it emits events and delegate the job to container component
+ */
 @Component({
   selector: 'pm-product-list',
   templateUrl: './product-list.component.html',
